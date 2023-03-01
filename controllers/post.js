@@ -1,7 +1,16 @@
+const { post } = require('.')
 const { Post, Tag } = require('../models')
 
 async function create(req, res, next) {
   const {title, body, tags} = req.body
+  if (!title && !body) return res.status(400).send('requires title and body')
+  post = await Post.updateOne(
+    {title: title},
+    {body: body},
+    {tags: tags},
+    {$addToSet: post}
+  )
+  return res.status(200).json(post)
   // TODO: create a new post
   // if there is no title or body, return a 400 status
   // omitting tags is OK
@@ -16,6 +25,8 @@ async function get(req, res) {
     // TODO: Find a single post
     // find a single post by slug and populate 'tags'
     // you will need to use .lean() or .toObject()
+    const post = await Post.find({slug: slug}).lean()
+    .populate('tags')
     post.createdAt = new Date(post.createdAt).toLocaleString('en-US', {
       month: '2-digit',
       day: '2-digit',
