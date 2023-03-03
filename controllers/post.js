@@ -88,7 +88,7 @@ async function update(req, res) {
     if (!(title && body)) return res.status(400).send('requires title and body')
     await Post.updateOne(
       {_id: postId},
-      {$set: {"$.title": title, "$.body": body, "$.tags": tags}}
+      {$set: {title: title, body: body, tags: tags}}
     )
     return res.status(200).send('updated')
     // TODO: update a post
